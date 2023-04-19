@@ -1,0 +1,6 @@
+train: ../datasets/Target-B/train/train-10/first/images
+val: ../datasets/Target-B/val/images
+test: ../datasets/Target-B/test/images
+# Classes
+nc: 1  # number of classes
+names: ['Barrel']  # class names
