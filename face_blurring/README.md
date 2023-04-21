@@ -20,20 +20,12 @@ Haar-cascade algorithm couldn't detect the face in the video
 It cannot detect the face.
 ```
 
-## Method 3: Using DeepFace()
-DeepFace is the most lightweight face recognition and facial attribute analysis library for Python.
-```
-
-```
-
-## Method 4: Using Retinaface
+## Method 3: Using Retinaface
 RetinaFace is a deep learning based cutting-edge facial detector for Python coming with facial landmarks.
+> Reference: https://github.com/serengil/retinaface
 ```angular2html
-Reference: https://github.com/elliottzheng/face-detection
+1. Detect face using Retinaface
+2. Blur images using OpenCV
+3. Do 1, 2 in every frame of videos and merge into video again
 ```
-landmarks in Retinaface
-- right_eye
-- left_eye
-- nose
-- mouth_right
-- mouth_left
+
