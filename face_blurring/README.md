@@ -24,7 +24,7 @@ It cannot detect the face.
 RetinaFace is a deep learning based cutting-edge facial detector for Python coming with facial landmarks.
 > Reference: https://github.com/serengil/retinaface
 ```angular2html
-1. Detect face using Retinaface
+1. Detect face using Retinaface in every frame of the video
 2. Blur images using OpenCV
 3. Do 1, 2 in every frame of videos and merge into video again
 ```
