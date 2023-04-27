@@ -21,14 +21,14 @@ video_name = '20200901_120617.MOV'
 video_path = os.path.join(example_folder_path, video_name)
 print(video_path)
 cap = cv2.VideoCapture(video_path)
-fourcc = cv2.VideoWriter_fourcc(*'h264')
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 
 fps = cap.get(cv2.CAP_PROP_FPS)
 # fourcc = cap.get(cv2.CAP_PROP_FOURCC)
 # cap.open(video_path)
 # print(cap.isOpened())
 # print(fps, fourcc)
-new_vid_name = video_name + '2'
+new_vid_name = 'RF20200901_120617.MOV'
 out = cv2.VideoWriter(new_vid_name, fourcc, fps, (1920, 1080))
 
 orig_vid_size = os.stat(video_path).st_size
