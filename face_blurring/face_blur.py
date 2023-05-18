@@ -8,7 +8,7 @@ import time
 
 tic = time.time()
 
-example_folder_path = r'/root/Simple_Lab/face_blurring/example_vid/'
+example_folder_path = r'/kyochul/home/kyochul/FHD_FWL/FWL_Action_Camera01/01_Stamping'
 
 video_name = '20200901_120617.MOV'
 video_path = os.path.join(example_folder_path, video_name)
