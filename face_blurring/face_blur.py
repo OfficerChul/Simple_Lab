@@ -5,6 +5,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import timedelta
 import time
+import docx
+
+if os.path.exists(r'/root/Simple_Lab/face_blurring/progress.docx'):
+    os.remove(r'/root/Simple_Lab/face_blurring/progress.docx')
+
+try:
+    doc = docx.Document(r'/root/Simple_Lab/face_blurring/progress.docx')
+except:
+    doc = docx.Document()
+    doc.save(r'/root/Simple_Lab/face_blurring/progress.docx')
+    print('The document created.')
 
 
 tic = time.time()
@@ -13,6 +24,9 @@ tic = time.time()
 # example_folder_path = r'/root/Simple_Lab/face_blurring/example_vids/'
 FHD_FWL = r'/kyochul/home/kyochul/FHD_FWL'
 out_path = r'/kyochul/home/kyochul/BLURRED_FHD_FWL'
+
+# text file to keep up the progress
+# prog_file = open(r'/root/Simple_Lab/face_blurring/progress.txt', "w+")
 
 vid_num = 0
 for action_camera in os.listdir(FHD_FWL):
@@ -42,14 +56,23 @@ for action_camera in os.listdir(FHD_FWL):
             tic3 = time.time() # tictoc for one video
 
             cap = cv2.VideoCapture(video_path)
-            fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
             fps = cap.get(cv2.CAP_PROP_FPS)
 
-            out = cv2.VideoWriter(out_video_path, fourcc, fps, (1920, 1080))
+            temp_out_vid_path = os.path.join(r'/root', vid)
+            out = cv2.VideoWriter(temp_out_vid_path, fourcc, fps, (1920, 1080))
+
+            # out = cv2.VideoWriter(out_video_path, fourcc, fps, (1920, 1080))
 
             total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-            print(f'{video_path} PROCESSING START!!, total frame: {total}')
+            msg1 = f'{video_path}\ntotal frame: {total}'
+
+            print(msg1)
+            # prog_file.write(msg1 + '\n')
+            doc.add_paragraph(msg1)
+            doc.save(r'/root/Simple_Lab/face_blurring/progress.docx')
+
             vid_num += 1
 
             count = 0
@@ -90,7 +113,14 @@ for action_camera in os.listdir(FHD_FWL):
             out.release()
             elapsed3 = time.time() - tic3
             formatted_elapsed3 = str(timedelta(seconds=elapsed3))
-            print(f'{vid_num}th/25210 video took {formatted_elapsed3} time elapsed.\n')
+            msg2 = f'{vid_num}th / 25210 video took {formatted_elapsed3} time elapsed, {round((vid_num / 25210) * 100, 4)}% done\n'
+            print(msg2)
+            # prog_file.write(msg2 + '\n')
+            doc.add_paragraph(msg2)
+            doc.add_paragraph('-----------------------------------------')
+            doc.save(r'/root/Simple_Lab/face_blurring/progress.docx')
+
+prog_file.close()
             
 
 elapsed = time.time() - tic
