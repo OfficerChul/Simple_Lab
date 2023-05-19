@@ -34,11 +34,12 @@ for action_camera in os.listdir(FHD_FWL):
             os.mkdir(out_action_path)
 
         # video start
-        for vid in os.listdir(action_path):
-            
+        for vid in os.listdir(action_path):         
             video_path = os.path.join(action_path, vid)
 
             out_video_path = os.path.join(out_action_path, vid)
+
+            tic3 = time.time() # tictoc for one video
 
             cap = cv2.VideoCapture(video_path)
             fourcc = cv2.VideoWriter_fourcc(*'MJPG')
@@ -48,7 +49,8 @@ for action_camera in os.listdir(FHD_FWL):
             out = cv2.VideoWriter(out_video_path, fourcc, fps, (1920, 1080))
 
             total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-            print(f'total frame: {total}')
+            print(f'{video_path} PROCESSING START!!, total frame: {total}')
+            vid_num += 1
 
             count = 0
             while True:
@@ -60,20 +62,22 @@ for action_camera in os.listdir(FHD_FWL):
                 # print(f'count: {count}/{total}')
                 frameRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 faces = RetinaFace.detect_faces(frameRGB)
-                for face in faces.keys():
-                    face = faces[face]
-                    facial_area = face['facial_area']
-                    x = facial_area[0]
-                    y = facial_area[1]
-                    w = facial_area[2] - facial_area[0]
-                    h = facial_area[3] - facial_area[1]
-                    roi = frame[y:y + h, x:x + w]
+                if type(faces) != tuple: # if the face cannot be detected from the video
 
-                    # apply gaussian blur to face rectangle
-                    roi = cv2.GaussianBlur(roi, (17, 17), 30)
+                    for face in faces.keys():
+                        face = faces[face]
+                        facial_area = face['facial_area']
+                        x = facial_area[0]
+                        y = facial_area[1]
+                        w = facial_area[2] - facial_area[0]
+                        h = facial_area[3] - facial_area[1]
+                        roi = frame[y:y + h, x:x + w]
 
-                    # add blurred face on original image to get final image
-                    frame[y:y + roi.shape[0], x:x + roi.shape[1]] = roi
+                        # apply gaussian blur to face rectangle
+                        roi = cv2.GaussianBlur(roi, (17, 17), 30)
+
+                        # add blurred face on original image to get final image
+                        frame[y:y + roi.shape[0], x:x + roi.shape[1]] = roi
 
                 out.write(frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -81,9 +85,13 @@ for action_camera in os.listdir(FHD_FWL):
                 elapsed2 = time.time() - tic2
                 formatted_elapsed2 = str(timedelta(seconds=elapsed2))
                 print(f'count: {count}/{total}, elapsed time(%hh:%mm:%ss.xxx): {formatted_elapsed2}, progess: {vid_num}/25210')
-                vid_num += 1
+                
             cap.release()
             out.release()
+            elapsed3 = time.time() - tic3
+            formatted_elapsed3 = str(timedelta(seconds=elapsed3))
+            print(f'{vid_num}th/25210 video took {formatted_elapsed3} time elapsed.\n')
+            
 
 elapsed = time.time() - tic
 formatted_elapsed = str(timedelta(seconds=elapsed))
